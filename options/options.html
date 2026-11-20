@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Smart Mail Notifier — Settings</title>
+  <link rel="stylesheet" href="options.css" />
+</head>
+<body>
+  <div class="shell">
+    <aside class="rail">
+      <div class="rail-brand">
+        <img src="../icons/icon32.png" alt="" width="22" height="22" />
+        <span>Smart Mail Notifier</span>
+      </div>
+      <nav class="rail-nav">
+        <a href="#general">General</a>
+        <a href="#notifications">Notifications</a>
+        <a href="#filters">Filters</a>
+        <a href="#badge">Badge &amp; Counter</a>
+        <a href="#privacy">Privacy</a>
+      </nav>
+      <div class="rail-status" id="saveStatus" aria-live="polite"></div>
+    </aside>
+
+    <main class="content">
+      <!-- ============ GENERAL ============ -->
+      <section id="general" class="card">
+        <p class="eyebrow">General</p>
+
+        <div class="field field-row">
+          <div>
+            <label class="field-label" for="enabledToggle">Extension enabled</label>
+            <p class="field-help">Turns polling, notifications, and the badge off entirely without signing you out.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="enabledToggle" />
+            <span class="switch-track"><span class="switch-knob"></span></span>
+          </label>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="frequencySelect">Check frequency</label>
+          <p class="field-help">How often the extension checks Gmail for new mail.</p>
+          <select id="frequencySelect" class="select">
+            <option value="1">Every 1 minute</option>
+            <option value="2">Every 2 minutes</option>
+            <option value="5">Every 5 minutes</option>
+            <option value="15">Every 15 minutes</option>
+            <option value="30">Every 30 minutes</option>
+            <option value="custom">Custom…</option>
+          </select>
+          <input type="number" id="frequencyCustom" class="number-input hidden" min="1" max="180" placeholder="Minutes" />
+        </div>
+
+        <div class="field">
+          <label class="field-label">Accounts</label>
+          <p class="field-help">Connects automatically to every Gmail you're signed into in Chrome — no setup. Remove one to stop watching it; click the button again to bring it back.</p>
+          <div id="accountsList" class="accounts-list"></div>
+          <div class="account-actions">
+            <button id="signInBtn" class="btn btn-primary">Sign in with Google</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ NOTIFICATIONS ============ -->
+      <section id="notifications" class="card">
+        <p class="eyebrow">Notifications</p>
+
+        <div class="field field-row">
+          <div>
+            <label class="field-label" for="notifToggle">Desktop notifications</label>
+            <p class="field-help">Show a native notification when new mail arrives.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="notifToggle" />
+            <span class="switch-track"><span class="switch-knob"></span></span>
+          </label>
+        </div>
+
+        <div class="field field-row">
+          <div>
+            <label class="field-label" for="soundToggle">Notification sound</label>
+            <p class="field-help">Play a short built-in chime alongside the notification.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="soundToggle" />
+            <span class="switch-track"><span class="switch-knob"></span></span>
+          </label>
+        </div>
+
+        <div class="field field-row">
+          <div>
+            <label class="field-label" for="groupToggle">Group multiple emails</label>
+            <p class="field-help">Several new messages at once become one "N new emails" notification instead of a burst.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="groupToggle" />
+            <span class="switch-track"><span class="switch-knob"></span></span>
+          </label>
+        </div>
+
+        <div class="field field-row">
+          <div>
+            <label class="field-label" for="previewToggle">Show snippet preview</label>
+            <p class="field-help">Off shows only the sender and subject — useful if others can see your screen.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="previewToggle" />
+            <span class="switch-track"><span class="switch-knob"></span></span>
+          </label>
+        </div>
+      </section>
+
+      <!-- ============ FILTERS ============ -->
+      <section id="filters" class="card">
+        <p class="eyebrow">Filters</p>
+
+        <div class="field">
+          <label class="field-label">Sender filter</label>
+          <div class="segmented" id="senderModeGroup">
+            <button data-value="none" class="segmented-btn">Off</button>
+            <button data-value="allow" class="segmented-btn">Allow list</button>
+            <button data-value="block" class="segmented-btn">Block list</button>
+          </div>
+          <textarea id="senderList" class="textarea" rows="3" placeholder="one per line — name@example.com or @newsletter-domain.com"></textarea>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Keyword filter</label>
+          <div class="segmented" id="keywordModeGroup">
+            <button data-value="none" class="segmented-btn">Off</button>
+            <button data-value="include" class="segmented-btn">Must include</button>
+            <button data-value="exclude" class="segmented-btn">Must exclude</button>
+          </div>
+          <textarea id="keywordList" class="textarea" rows="2" placeholder="one per line — invoice, urgent, receipt"></textarea>
+          <p class="field-help">Matched against the subject line only.</p>
+        </div>
+
+        <div class="field field-row">
+          <div>
+            <label class="field-label" for="dndToggle">Do Not Disturb window</label>
+            <p class="field-help">Mutes notifications and sound during these hours. The badge and popup keep updating normally.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="dndToggle" />
+            <span class="switch-track"><span class="switch-knob"></span></span>
+          </label>
+        </div>
+        <div class="field field-row dnd-times" id="dndTimes">
+          <div class="time-field">
+            <label class="field-help" for="dndStart">Starts</label>
+            <input type="time" id="dndStart" class="time-input" />
+          </div>
+          <div class="time-field">
+            <label class="field-help" for="dndEnd">Ends</label>
+            <input type="time" id="dndEnd" class="time-input" />
+          </div>
+        </div>
+        <div class="field field-row">
+          <div>
+            <label class="field-label" for="dndWeekendToggle">Mute all day on weekends</label>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="dndWeekendToggle" />
+            <span class="switch-track"><span class="switch-knob"></span></span>
+          </label>
+        </div>
+      </section>
+
+      <!-- ============ BADGE & COUNTER ============ -->
+      <section id="badge" class="card">
+        <p class="eyebrow">Badge &amp; Counter</p>
+
+        <div class="field">
+          <label class="field-label" for="badgeModeSelect">Badge shows</label>
+          <select id="badgeModeSelect" class="select">
+            <option value="total">Today's total</option>
+            <option value="unread">Unread only</option>
+            <option value="both">Both (unread on badge, total in popup)</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Color thresholds</label>
+          <p class="field-help">The badge changes color as the count climbs.</p>
+          <div class="threshold-row">
+            <span class="swatch" style="background:#2fa36b"></span>
+            <span>below</span>
+            <input type="number" id="thresholdLow" class="number-input small" min="1" />
+            <span class="swatch" style="background:#e8a33d"></span>
+            <span>below</span>
+            <input type="number" id="thresholdHigh" class="number-input small" min="2" />
+            <span class="swatch" style="background:#d34b3d"></span>
+            <span>and above</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="resetHourSelect">Daily reset time</label>
+          <p class="field-help">The counter and popup list clear at this local time each day.</p>
+          <select id="resetHourSelect" class="select"></select>
+        </div>
+      </section>
+
+      <!-- ============ PRIVACY ============ -->
+      <section id="privacy" class="card">
+        <p class="eyebrow">Privacy</p>
+
+        <div class="notice">
+          <p>Everything this extension reads — sender, subject, snippet — comes from Gmail's own inbox feed using the Gmail sessions already signed in inside Chrome, and is stored only in your browser via <code>chrome.storage</code>. No Google API keys, no OAuth, no other servers.</p>
+          <p class="field-help">It can only see unread inbox mail and is strictly read-only: it cannot send, archive, or modify anything.</p>
+        </div>
+
+        <div class="field field-row">
+          <div>
+            <label class="field-label">Clear cached data</label>
+            <p class="field-help">Removes today's cached message list and resets the sync cursor. You'll stay signed in.</p>
+          </div>
+          <button id="clearCacheBtn" class="btn btn-ghost">Clear cache</button>
+        </div>
+
+        <div class="field field-row">
+          <div>
+            <label class="field-label">Disconnect &amp; erase</label>
+            <p class="field-help">Forgets every account and erases all local data and settings. Your Google sign-in in Chrome is untouched.</p>
+          </div>
+          <button id="revokeBtn" class="btn btn-danger">Erase everything</button>
+        </div>
+      </section>
+
+      <p class="version-line">Smart Mail Notifier · v2.0.0</p>
+    </main>
+  </div>
+
+  <script type="module" src="options.js"></script>
+</body>
+</html>
